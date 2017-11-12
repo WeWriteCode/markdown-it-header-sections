@@ -212,21 +212,4 @@ describe('markdown-it-header-sections', function(){
     assert.equal(res, expected);
   });
 
-  it('should move, not copy, ID from header', function(){
-    var src = multiline.stripIndent(function(){/*
-      # asdf {#asdf}
-      qwerty
-    */});
-    var expected = multiline.stripIndent(function(){/*
-      <section id="asdf">
-      <h1>asdf</h1>
-      <p>qwerty</p>
-      </section>
-
-    */});
-    md.use(require('markdown-it-attrs'));
-    md.use(headerSections);
-    var res = md.render(src);
-    assert.equal(res, expected);
-  });
 });

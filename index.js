@@ -63,7 +63,7 @@ module.exports = function headerSections(md) {
         tokens.push(openSection(token.attrs));
         if (token.attrIndex('id') !== -1) {
           // remove ID from token
-          token.attrs.splice(token.attrIndex('id'), 1);
+          // token.attrs.splice(token.attrIndex('id'), 1);
         }
         sections.push(section);
       }
