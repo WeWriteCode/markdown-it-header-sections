@@ -6,9 +6,9 @@ var headerSections = require('./');
 
 var origEqual = assert.equal;
 assert.equal = function(actual, expected) {
-  var r = /\r/g
+  var r = /\r/g;
   return origEqual(actual.replace(r, ''), expected.replace(r, ''));
-}
+};
 
 describe('markdown-it-header-sections', function(){
 
@@ -70,6 +70,33 @@ describe('markdown-it-header-sections', function(){
       <p>ipsum</p>
       </section>
 
+    */});
+    md.use(headerSections);
+    var res = md.render(src);
+    assert.equal(res, expected);
+  });
+
+  it('should close sections when a new header is of same or lower level and in a blockquote', function(){
+    var src = multiline.stripIndent(function(){/*
+      # asdf
+      lorem
+      > # fdsa
+      > ipsum
+    */});
+    var expected = multiline.stripIndent(function(){/*
+      <section>
+      <h1>asdf</h1>
+      <p>lorem</p>
+      <section>
+      <blockquote>
+      <section>
+      <h1>fdsa</h1>
+      <p>ipsum</p>
+      </section>
+      </section>
+      </blockquote>
+      </section>
+      
     */});
     md.use(headerSections);
     var res = md.render(src);

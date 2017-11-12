@@ -52,7 +52,7 @@ module.exports = function headerSections(md) {
       }
 
       // add sections before headers
-      if (token.type == 'heading_open') {
+      if (token.type == 'heading_open' || token.type == 'blockquote_open') {
         var section = {
           header: headingLevel(token.tag),
           nesting: nestedLevel
