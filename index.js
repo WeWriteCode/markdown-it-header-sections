@@ -92,16 +92,21 @@ module.exports = function headerSections(md) {
       // add sections before blockquotes
       if (token.type == 'blockquote_open') {
         var section = {
-          header: headingLevel(token.tag),
+          header: "blockquote",
           nesting: -1
         };
 
         tokens.push(openSection(token.attrs));
-
         sections.push(section);
       }
 
       tokens.push(token);
+
+      // add sections before blockquotes
+      if (token.type == 'blockquote_close') {
+        tokens.push(closeSection());
+        sections.pop();
+      }
 
       // add sections before divs
       if (token.type == 'html_block') {

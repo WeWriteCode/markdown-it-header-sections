@@ -97,6 +97,32 @@ describe('markdown-it-header-sections', function(){
     assert.equal(res, expected);
   });
 
+  it('should close a blockquote section before opening a new one', function(){
+    var src = multiline.stripIndent(function(){/*
+      ___
+      > asdf
+
+      > asdf
+    */});
+    var expected = multiline.stripIndent(function(){/*
+      <hr>
+      <section>
+      <blockquote>
+      <p>asdf</p>
+      </blockquote>
+      </section>
+      <section>
+      <blockquote>
+      <p>asdf</p>
+      </blockquote>
+      </section>
+      
+    */});
+    md.use(headerSections);
+    var res = md.render(src);
+    assert.equal(res, expected);
+  });
+
   it('should handle divs correctly', function(){
     var src = multiline.stripIndent(function(){/*
       ## header 1
