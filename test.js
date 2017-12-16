@@ -129,6 +129,35 @@ describe('markdown-it-header-sections', function(){
     assert.equal(res, expected);
   });
 
+
+  it('should handle divs w/o headers correctly', function(){
+    var src = multiline.stripIndent(function(){/*
+      ## header 1
+      Something.
+
+      <div>
+
+      contents
+      </div>
+
+    */});
+    var expected = multiline.stripIndent(function(){/*
+      <section>
+      <h2>header 1</h2>
+      <p>Something.</p>
+      <section>
+      <div>
+      <p>contents</p>
+      </div>
+      </section>
+      </section>
+
+    */});
+    md.use(headerSections);
+    var res = md.render(src);
+    assert.equal(res, expected);
+  });
+
   it('should close sections when a new header is of same or lower level and in a blockquote', function(){
     var src = multiline.stripIndent(function(){/*
       # asdf

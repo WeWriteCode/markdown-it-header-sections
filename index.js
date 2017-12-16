@@ -73,20 +73,20 @@ module.exports = function headerSections(md) {
       if (token.type == 'html_block') {
         if (token.content.startsWith("</")) {
           // closing
-          tokens.push(closeSection());
-          sections.pop();
+          if(last(sections).header !== "html") {
+            tokens.push(closeSection());
+            sections.pop();
+          }
         } else {
           // opening
           var section = {
-            header: headingLevel(token.tag),
+            header: "html",
             nesting: -1
           };
 
           tokens.push(openSection(token.attrs));
           sections.push(section);
-
         }
-
       }
 
       // add sections before blockquotes
@@ -102,6 +102,16 @@ module.exports = function headerSections(md) {
       }
 
       tokens.push(token);
+
+      // add sections before divs
+      if (token.type == 'html_block') {
+        if (token.content.startsWith("</") && last(sections).header === "html") {
+          // closing
+          tokens.push(closeSection());
+          sections.pop();
+        }
+      }
+
     }  // end for every token
     closeAllSections();
 
