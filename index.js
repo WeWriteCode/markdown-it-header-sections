@@ -52,11 +52,12 @@ module.exports = function headerSections(md) {
       }
 
       // add sections before headers
-      if (token.type == 'heading_open' || token.type == 'blockquote_open') {
+      if (token.type == 'heading_open') {
         var section = {
           header: headingLevel(token.tag),
           nesting: nestedLevel
         };
+
         if (last(sections) && section.header <= last(sections).header) {
           closeSections(section);
         }
@@ -65,6 +66,18 @@ module.exports = function headerSections(md) {
           // remove ID from token
           // token.attrs.splice(token.attrIndex('id'), 1);
         }
+        sections.push(section);
+      }
+
+      // add sections before blockquotes
+      if (token.type == 'blockquote_open') {
+        var section = {
+          header: headingLevel(token.tag),
+          nesting: -1
+        };
+
+        tokens.push(openSection(token.attrs));
+
         sections.push(section);
       }
 

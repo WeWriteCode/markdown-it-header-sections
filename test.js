@@ -76,6 +76,27 @@ describe('markdown-it-header-sections', function(){
     assert.equal(res, expected);
   });
 
+  it('should wrap a blockquote in a section', function(){
+    var src = multiline.stripIndent(function(){/*
+      # asdf
+      > ipsum
+    */});
+    var expected = multiline.stripIndent(function(){/*
+      <section>
+      <h1>asdf</h1>
+      <section>
+      <blockquote>
+      <p>ipsum</p>
+      </blockquote>
+      </section>
+      </section>
+      
+    */});
+    md.use(headerSections);
+    var res = md.render(src);
+    assert.equal(res, expected);
+  });
+
   it('should close sections when a new header is of same or lower level and in a blockquote', function(){
     var src = multiline.stripIndent(function(){/*
       # asdf
@@ -93,8 +114,8 @@ describe('markdown-it-header-sections', function(){
       <h1>fdsa</h1>
       <p>ipsum</p>
       </section>
-      </section>
       </blockquote>
+      </section>
       </section>
       
     */});
