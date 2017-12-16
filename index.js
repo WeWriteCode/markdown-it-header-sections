@@ -69,6 +69,26 @@ module.exports = function headerSections(md) {
         sections.push(section);
       }
 
+      // add sections before divs
+      if (token.type == 'html_block') {
+        if (token.content.startsWith("</")) {
+          // closing
+          tokens.push(closeSection());
+          sections.pop();
+        } else {
+          // opening
+          var section = {
+            header: headingLevel(token.tag),
+            nesting: -1
+          };
+
+          tokens.push(openSection(token.attrs));
+          sections.push(section);
+
+        }
+
+      }
+
       // add sections before blockquotes
       if (token.type == 'blockquote_open') {
         var section = {

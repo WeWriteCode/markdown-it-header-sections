@@ -19,7 +19,7 @@ describe('markdown-it-header-sections', function(){
   */});
 
   beforeEach(function(){
-    md = Md();
+    md = Md({html: true});
   });
 
   it('should add sections to headers', function(){
@@ -91,6 +91,38 @@ describe('markdown-it-header-sections', function(){
       </section>
       </section>
       
+    */});
+    md.use(headerSections);
+    var res = md.render(src);
+    assert.equal(res, expected);
+  });
+
+  it('should handle divs correctly', function(){
+    var src = multiline.stripIndent(function(){/*
+      ## header 1
+      Something.
+
+      <div>
+
+      ## header 2
+      contents
+      </div>
+
+    */});
+    var expected = multiline.stripIndent(function(){/*
+      <section>
+      <h2>header 1</h2>
+      <p>Something.</p>
+      <section>
+      <div>
+      <section>
+      <h2>header 2</h2>
+      <p>contents</p>
+      </section>
+      </div>
+      </section>
+      </section>
+
     */});
     md.use(headerSections);
     var res = md.render(src);
