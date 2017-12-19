@@ -10,7 +10,7 @@ module.exports = function headerSections(md) {
     function openSection(attrs) {
       var t = new Token('section_open', 'section', 1);
       t.block = true;
-      t.attrs = attrs && attrs.map(function (attr) { return [attr[0], attr[1]] });  // copy
+      t.attrs = attrs && attrs.map(function (attr) { return [attr[0], attr[1]]; });  // copy
       return t;
     }
 
@@ -42,6 +42,7 @@ module.exports = function headerSections(md) {
 
     for (var i = 0, l = state.tokens.length; i < l; i++) {
       var token = state.tokens[i];
+      var section = null;
 
       // record level of nesting
       if (token.type.search('heading') !== 0) {
@@ -53,7 +54,7 @@ module.exports = function headerSections(md) {
 
       // add sections before headers
       if (token.type == 'heading_open') {
-        var section = {
+        section = {
           header: headingLevel(token.tag),
           nesting: nestedLevel
         };
@@ -64,7 +65,7 @@ module.exports = function headerSections(md) {
         tokens.push(openSection(token.attrs));
         if (token.attrIndex('id') !== -1) {
           // remove ID from token
-          // token.attrs.splice(token.attrIndex('id'), 1);
+          token.attrs.splice(token.attrIndex('id'), 1);
         }
         sections.push(section);
       }
@@ -79,7 +80,7 @@ module.exports = function headerSections(md) {
           }
         } else {
           // opening
-          var section = {
+          section = {
             header: "html",
             nesting: -1
           };
@@ -91,7 +92,7 @@ module.exports = function headerSections(md) {
 
       // add sections before blockquotes
       if (token.type == 'blockquote_open') {
-        var section = {
+        section = {
           header: "blockquote",
           nesting: -1
         };
