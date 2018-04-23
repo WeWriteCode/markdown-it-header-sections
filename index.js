@@ -74,7 +74,7 @@ module.exports = function headerSections(md) {
       if (token.type == 'html_block') {
         if (token.content.startsWith("</")) {
           // closing
-          if(last(sections).header !== "html") {
+          if(last(sections) && last(sections).header !== "html") {
             tokens.push(closeSection());
             sections.pop();
           }
@@ -111,7 +111,7 @@ module.exports = function headerSections(md) {
 
       // add sections before divs
       if (token.type == 'html_block') {
-        if (token.content.startsWith("</") && last(sections).header === "html") {
+        if (token.content.startsWith("</") && last(sections) && last(sections).header === "html") {
           // closing
           tokens.push(closeSection());
           sections.pop();
